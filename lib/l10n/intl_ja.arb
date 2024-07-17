@@ -1,0 +1,16 @@
+{
+  "@@locale": "ja",
+  "applicationTitle": "Flutter Demo Structure",
+  "@appName": {
+    "description": "Application Name"
+  },
+  "connectionTimedOut": "The connection has timed out. Please try again",
+  "connectionProblem": "There are some problems with the connection. Please try again",
+  "invalidCredentials": "Invalid credentials",
+  "home": "Home_ja",
+  "geofencing": "Geofencing",
+  "settings": "Settings",
+  "selectLanguage": "Select Language",
+  "changeLanguage": "Change Language",
+  "search": "Search"
+}

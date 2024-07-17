@@ -1,0 +1,24 @@
+{
+  "@@locale": "en",
+  "applicationTitle": "Flutter Demo Structure",
+  "@appName": {
+    "description": "Application Name"
+  },
+  "connectionTimedOut": "The connection has timed out. Please try again",
+  "connectionProblem": "There are some problems with the connection. Please try again",
+  "invalidCredentials": "Invalid credentials",
+  "home": "Home_en",
+  "geofencing": "Geofencing",
+  "settings": "Settings",
+  "selectLanguage": "Select Language",
+  "changeLanguage": "Change Language",
+  "search": "Search",
+  "addGeofencing": "Add Geofencing",
+  "selectARange": "Select a Range",
+  "moveingOnExit": "Moving on Exit",
+  "continue1": "Continue",
+  "onExit": "On Exit",
+  "onEntry": "On Entry",
+  "whatsTheNameOfGeofencing": "What's the name of Geofencing",
+  "name": "Name"
+}
