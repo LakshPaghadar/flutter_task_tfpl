@@ -50,10 +50,10 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Flutter Demo Structure`
+  /// `Flutter Task`
   String get applicationTitle {
     return Intl.message(
-      'Flutter Demo Structure',
+      'Flutter Task',
       name: 'applicationTitle',
       desc: '',
       args: [],
@@ -90,10 +90,10 @@ class S {
     );
   }
 
-  /// `Home_en`
+  /// `Home`
   String get home {
     return Intl.message(
-      'Home_en',
+      'Home',
       name: 'home',
       desc: '',
       args: [],
@@ -225,6 +225,46 @@ class S {
     return Intl.message(
       'Name',
       name: 'name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `English`
+  String get english {
+    return Intl.message(
+      'English',
+      name: 'english',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Arabic`
+  String get arabic {
+    return Intl.message(
+      'Arabic',
+      name: 'arabic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Japanese`
+  String get japanese {
+    return Intl.message(
+      'Japanese',
+      name: 'japanese',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Data found`
+  String get noDataFound {
+    return Intl.message(
+      'No Data found',
+      name: 'noDataFound',
       desc: '',
       args: [],
     );

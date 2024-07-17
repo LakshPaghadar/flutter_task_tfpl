@@ -22,21 +22,35 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "addGeofencing":
+            MessageLookupByLibrary.simpleMessage("إضافة السياج الجغرافي"),
         "applicationTitle":
-            MessageLookupByLibrary.simpleMessage("Flutter Demo Structure"),
-        "changeLanguage":
-            MessageLookupByLibrary.simpleMessage("Change Language"),
+            MessageLookupByLibrary.simpleMessage("Flutter Task"),
+        "arabic": MessageLookupByLibrary.simpleMessage("Arabic"),
+        "changeLanguage": MessageLookupByLibrary.simpleMessage("تغيير اللغة"),
         "connectionProblem": MessageLookupByLibrary.simpleMessage(
             "There are some problems with the connection. Please try again"),
         "connectionTimedOut": MessageLookupByLibrary.simpleMessage(
             "The connection has timed out. Please try again"),
-        "geofencing": MessageLookupByLibrary.simpleMessage("Geofencing"),
-        "home": MessageLookupByLibrary.simpleMessage("Home_ar"),
+        "continue1": MessageLookupByLibrary.simpleMessage("يكمل"),
+        "english": MessageLookupByLibrary.simpleMessage("English"),
+        "geofencing":
+            MessageLookupByLibrary.simpleMessage("تحديد الموقع الجغرافي"),
+        "home": MessageLookupByLibrary.simpleMessage("بيت"),
         "invalidCredentials":
             MessageLookupByLibrary.simpleMessage("Invalid credentials"),
-        "search": MessageLookupByLibrary.simpleMessage("Search"),
-        "selectLanguage":
-            MessageLookupByLibrary.simpleMessage("Select Language"),
-        "settings": MessageLookupByLibrary.simpleMessage("Settings")
+        "japanese": MessageLookupByLibrary.simpleMessage("Japanese"),
+        "moveingOnExit":
+            MessageLookupByLibrary.simpleMessage("الانتقال إلى الخروج"),
+        "name": MessageLookupByLibrary.simpleMessage("اسم"),
+        "noDataFound": MessageLookupByLibrary.simpleMessage("لاتوجد بيانات"),
+        "onEntry": MessageLookupByLibrary.simpleMessage("عند الدخول"),
+        "onExit": MessageLookupByLibrary.simpleMessage("عند الخروج"),
+        "search": MessageLookupByLibrary.simpleMessage("يبحث"),
+        "selectARange": MessageLookupByLibrary.simpleMessage("حدد نطاقًا"),
+        "selectLanguage": MessageLookupByLibrary.simpleMessage("اختار اللغة"),
+        "settings": MessageLookupByLibrary.simpleMessage("إعدادات"),
+        "whatsTheNameOfGeofencing":
+            MessageLookupByLibrary.simpleMessage("ما هو اسم Geofencing")
       };
 }

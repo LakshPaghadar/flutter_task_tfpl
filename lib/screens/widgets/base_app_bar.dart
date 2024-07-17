@@ -62,13 +62,14 @@ class _BaseAppBarState extends State<BaseAppBar> {
                 widget.title!,
                 style: textWhite18_700.copyWith(color: AppColor.color575B60),
               ),
-      backgroundColor: AppColor.white,
+      backgroundColor: AppColor.bgColor,
       elevation: widget.elevations,
       automaticallyImplyLeading: false,
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
           decoration: BoxDecoration(
+            color: AppColor.white,
             borderRadius: BorderRadius.all(
               Radius.circular(5.h),
             ),

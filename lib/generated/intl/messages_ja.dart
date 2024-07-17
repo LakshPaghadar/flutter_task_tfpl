@@ -22,21 +22,32 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "addGeofencing": MessageLookupByLibrary.simpleMessage("ジオフェンシングを追加する"),
         "applicationTitle":
-            MessageLookupByLibrary.simpleMessage("Flutter Demo Structure"),
-        "changeLanguage":
-            MessageLookupByLibrary.simpleMessage("Change Language"),
+            MessageLookupByLibrary.simpleMessage("Flutter Task"),
+        "arabic": MessageLookupByLibrary.simpleMessage("Arabic"),
+        "changeLanguage": MessageLookupByLibrary.simpleMessage("言語を変えてください"),
         "connectionProblem": MessageLookupByLibrary.simpleMessage(
             "There are some problems with the connection. Please try again"),
         "connectionTimedOut": MessageLookupByLibrary.simpleMessage(
             "The connection has timed out. Please try again"),
-        "geofencing": MessageLookupByLibrary.simpleMessage("Geofencing"),
-        "home": MessageLookupByLibrary.simpleMessage("Home_ja"),
+        "continue1": MessageLookupByLibrary.simpleMessage("続く"),
+        "english": MessageLookupByLibrary.simpleMessage("English"),
+        "geofencing": MessageLookupByLibrary.simpleMessage("ジオフェンシング"),
+        "home": MessageLookupByLibrary.simpleMessage("家"),
         "invalidCredentials":
             MessageLookupByLibrary.simpleMessage("Invalid credentials"),
-        "search": MessageLookupByLibrary.simpleMessage("Search"),
-        "selectLanguage":
-            MessageLookupByLibrary.simpleMessage("Select Language"),
-        "settings": MessageLookupByLibrary.simpleMessage("Settings")
+        "japanese": MessageLookupByLibrary.simpleMessage("Japanese"),
+        "moveingOnExit": MessageLookupByLibrary.simpleMessage("出口で移動する"),
+        "name": MessageLookupByLibrary.simpleMessage("名前"),
+        "noDataFound": MessageLookupByLibrary.simpleMessage("何もデータが見つかりませんでした"),
+        "onEntry": MessageLookupByLibrary.simpleMessage("入場時"),
+        "onExit": MessageLookupByLibrary.simpleMessage("出口時"),
+        "search": MessageLookupByLibrary.simpleMessage("検索"),
+        "selectARange": MessageLookupByLibrary.simpleMessage("範囲を選択してください"),
+        "selectLanguage": MessageLookupByLibrary.simpleMessage("言語を選択する"),
+        "settings": MessageLookupByLibrary.simpleMessage("設定"),
+        "whatsTheNameOfGeofencing":
+            MessageLookupByLibrary.simpleMessage("ジオフェンシングの名前は何ですか")
       };
 }

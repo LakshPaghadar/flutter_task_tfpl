@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../model/response/photos_response.dart';
-import '../../model/response/post_response.dart';
 
 part 'post_store.g.dart';
 
@@ -20,32 +19,17 @@ abstract class PostStoreBase with Store {
   @observable
   ObservableList<PhotosResponse> photosList = ObservableList();
 
+  ObservableList<PhotosResponse> backupPhotosList = ObservableList();
+
   @observable
   String? errorMessage;
 
-  // @action
-  // Future getPostList() async {
-  //   try {
-  //     var res = await postRepositoryImpl.getPosts();
-  //     postList.addAll(res);
-  //   } on DioException catch (e) {
-  //     if (e.type == DioExceptionType.unknown &&
-  //         (e.error is SocketException || e.error is HandshakeException)) {
-  //       errorMessage = "No internet connection";
-  //     } else {
-  //       errorMessage = e.toString();
-  //     }
-  //   } catch (error, st) {
-  //     errorMessage = error.toString();
-  //     debugPrintStack(stackTrace: st);
-  //   }
-  // }
-
   @action
-  Future getPhotosList(int start,int limit) async {
+  Future getPhotosList(int start, int limit) async {
     try {
-      var res = await postRepositoryImpl.getPhotos(start,limit);
+      var res = await postRepositoryImpl.getPhotos(start, limit);
       photosList.addAll(res);
+      backupPhotosList.addAll(res);
     } on DioException catch (e) {
       if (e.type == DioExceptionType.unknown &&
           (e.error is SocketException || e.error is HandshakeException)) {
@@ -58,6 +42,38 @@ abstract class PostStoreBase with Store {
       debugPrintStack(stackTrace: st);
     }
   }
+
+  @action
+  void filterPostsByName(String name) {
+    if (name.isEmpty) {
+      photosList = ObservableList<PhotosResponse>.of(backupPhotosList);
+    } else {
+      photosList = ObservableList<PhotosResponse>.of(
+        backupPhotosList
+            .where((post) =>
+                post.title!.toLowerCase().contains(name.toLowerCase()))
+            .toList(),
+      );
+    }
+  }
+
+  // @action
+  // Future searchCharacters(String query) async {
+  //   try {
+  //     var res = await postRepositoryImpl.searchCharacters(query);
+  //     charactersList = res;
+  //   } on DioException catch (e) {
+  //     if (e.type == DioExceptionType.unknown &&
+  //         (e.error is SocketException || e.error is HandshakeException)) {
+  //       errorMessage = "No internet connection";
+  //     } else {
+  //       errorMessage = e.toString();
+  //     }
+  //   } catch (error, st) {
+  //     errorMessage = error.toString();
+  //     debugPrintStack(stackTrace: st);
+  //   }
+  // }
 }
 
 final postStore = locator<PostStore>();

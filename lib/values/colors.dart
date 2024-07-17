@@ -12,6 +12,7 @@ abstract class AppColor {
   static const Color brownColor = Color(0xffa16b56);
   static const Color brownSugarColor = Color(0xffe0a370);
   static const Color osloGray = Color(0xFF898E95);
+  static const Color bgColor = Color(0xFFF0F0F6);
   static const Color calico = Color(0xFFDEC584);
   static const Color santasGray = Color(0xff9FA2AA);
   static const Color mercury = Color(0xffE1E1E1);

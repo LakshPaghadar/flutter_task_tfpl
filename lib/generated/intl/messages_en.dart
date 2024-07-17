@@ -24,7 +24,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "addGeofencing": MessageLookupByLibrary.simpleMessage("Add Geofencing"),
         "applicationTitle":
-            MessageLookupByLibrary.simpleMessage("Flutter Demo Structure"),
+            MessageLookupByLibrary.simpleMessage("Flutter Task"),
+        "arabic": MessageLookupByLibrary.simpleMessage("Arabic"),
         "changeLanguage":
             MessageLookupByLibrary.simpleMessage("Change Language"),
         "connectionProblem": MessageLookupByLibrary.simpleMessage(
@@ -32,12 +33,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "connectionTimedOut": MessageLookupByLibrary.simpleMessage(
             "The connection has timed out. Please try again"),
         "continue1": MessageLookupByLibrary.simpleMessage("Continue"),
+        "english": MessageLookupByLibrary.simpleMessage("English"),
         "geofencing": MessageLookupByLibrary.simpleMessage("Geofencing"),
-        "home": MessageLookupByLibrary.simpleMessage("Home_en"),
+        "home": MessageLookupByLibrary.simpleMessage("Home"),
         "invalidCredentials":
             MessageLookupByLibrary.simpleMessage("Invalid credentials"),
+        "japanese": MessageLookupByLibrary.simpleMessage("Japanese"),
         "moveingOnExit": MessageLookupByLibrary.simpleMessage("Moving on Exit"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
+        "noDataFound": MessageLookupByLibrary.simpleMessage("No Data found"),
         "onEntry": MessageLookupByLibrary.simpleMessage("On Entry"),
         "onExit": MessageLookupByLibrary.simpleMessage("On Exit"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),

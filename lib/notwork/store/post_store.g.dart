@@ -50,6 +50,20 @@ mixin _$PostStore on PostStoreBase, Store {
         .run(() => super.getPhotosList(start, limit));
   }
 
+  late final _$PostStoreBaseActionController =
+      ActionController(name: 'PostStoreBase', context: context);
+
+  @override
+  void filterPostsByName(String name) {
+    final _$actionInfo = _$PostStoreBaseActionController.startAction(
+        name: 'PostStoreBase.filterPostsByName');
+    try {
+      return super.filterPostsByName(name);
+    } finally {
+      _$PostStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

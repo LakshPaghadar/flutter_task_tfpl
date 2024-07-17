@@ -1,16 +1,29 @@
 {
   "@@locale": "ja",
-  "applicationTitle": "Flutter Demo Structure",
+  "applicationTitle": "Flutter Task",
   "@appName": {
     "description": "Application Name"
   },
   "connectionTimedOut": "The connection has timed out. Please try again",
   "connectionProblem": "There are some problems with the connection. Please try again",
   "invalidCredentials": "Invalid credentials",
-  "home": "Home_ja",
-  "geofencing": "Geofencing",
-  "settings": "Settings",
-  "selectLanguage": "Select Language",
-  "changeLanguage": "Change Language",
-  "search": "Search"
+  "home": "家",
+  "geofencing": "ジオフェンシング",
+  "settings": "設定",
+  "selectLanguage": "言語を選択する",
+  "changeLanguage": "言語を変えてください",
+  "search": "検索",
+  "addGeofencing": "ジオフェンシングを追加する",
+  "selectARange": "範囲を選択してください",
+  "moveingOnExit": "出口で移動する",
+  "continue1": "続く",
+  "onExit": "出口時",
+  "onEntry": "入場時",
+  "whatsTheNameOfGeofencing": "ジオフェンシングの名前は何ですか",
+  "name": "名前",
+
+  "english": "English",
+  "arabic": "Arabic",
+  "japanese": "Japanese",
+  "noDataFound": "何もデータが見つかりませんでした"
 }

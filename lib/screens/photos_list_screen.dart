@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobx/mobx.dart';
 
 import '../generated/l10n.dart';
+import '../values/colors.dart';
 import 'image_card.dart';
 
 class PhotosListPage extends StatefulWidget {
@@ -46,13 +47,20 @@ class _PhotosListPageState extends State<PhotosListPage> {
       reaction((p0) => postStore.photosList, (list) {
         debugPrint("LIST_LIST : ${list.length}");
         if (list.isNotEmpty) {
-          isLoading.value = false;
+          isLoading2.value = false;
+          setState(() {});
         }
       }),
       reaction((p0) => postStore.errorMessage, (errorMsg) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(errorMsg.toString())));
-      })
+      }),
+      reaction((p0) => postStore.photosList, (list) {
+        debugPrint("LIST_LIST : ${list.length}");
+        if (list.isNotEmpty) {
+          isLoading2.value = false;
+        }
+      }),
     ];
   }
 
@@ -74,78 +82,81 @@ class _PhotosListPageState extends State<PhotosListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(S.of(context).home),
-        ),
-        drawer: Drawer(
-            child: ListView(
-          children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
+    return Scaffold(
+      backgroundColor: AppColor.bgColor,
+      appBar: AppBar(
+        elevation: 10.w,
+        title: Text(S.of(context).home),
+        backgroundColor: AppColor.bgColor,
+      ),
+      drawer: Drawer(
+          child: ListView(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: ListTile(
+              leading: Icon(Icons.message),
+              title: Text(S.of(context).home),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => LocationListPage()));
+            },
+            child: ListTile(
+              leading: Icon(Icons.account_circle),
+              title: Text(S.of(context).geofencing),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SettingsPage()));
+            },
+            child: ListTile(
+              leading: Icon(Icons.settings),
+              title: Text(S.of(context).settings),
+            ),
+          ),
+        ],
+      )),
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20).r,
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(hintText: S.of(context).search),
+              onChanged: (value) {
+                debugPrint("TEXT_VALUE $value");
+                postStore.filterPostsByName(value);
               },
-              child: ListTile(
-                leading: Icon(Icons.message),
-                title: Text(S.of(context).home),
-              ),
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => LocationListPage()));
+          ),
+          const SizedBox(
+            height: 10.0,
+            width: double.infinity,
+          ),
+          Expanded(
+            child: ValueListenableBuilder(
+              valueListenable: isLoading,
+              builder: (context, value, child) {
+                if (value) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return child!;
+                }
               },
-              child: ListTile(
-                leading: Icon(Icons.account_circle),
-                title: Text(S.of(context).geofencing),
-              ),
+              child: observeResponse(),
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SettingsPage()));
-              },
-              child: ListTile(
-                leading: Icon(Icons.settings),
-                title: Text(S.of(context).settings),
-              ),
-            ),
-          ],
-        )),
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20).r,
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: S.of(context).search
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10.0,
-              width: double.infinity,
-            ),
-            Expanded(
-              child: ValueListenableBuilder(
-                valueListenable: isLoading,
-                builder: (context, value, child) {
-                  if (value) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else {
-                    return child!;
-                  }
-                },
-                child: observeResponse(),
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
@@ -158,7 +169,7 @@ class _PhotosListPageState extends State<PhotosListPage> {
           if (isLoading.value) {
             return const Center(child: CircularProgressIndicator());
           } else if (postStore.photosList.isEmpty) {
-            return const Text("No Data found");
+            return Text(S.of(context).noDataFound);
           } else {
             return ListView.builder(
               itemCount: postStore.photosList.length + 1,

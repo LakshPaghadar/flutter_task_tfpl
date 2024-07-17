@@ -1,16 +1,29 @@
 {
   "@@locale": "ar",
-  "applicationTitle": "Flutter Demo Structure",
+  "applicationTitle": "Flutter Task",
   "@appName": {
     "description": "Application Name"
   },
   "connectionTimedOut": "The connection has timed out. Please try again",
   "connectionProblem": "There are some problems with the connection. Please try again",
   "invalidCredentials": "Invalid credentials",
-  "home": "Home_ar",
-  "geofencing": "Geofencing",
-  "settings": "Settings",
-  "selectLanguage": "Select Language",
-  "changeLanguage": "Change Language",
-  "search": "Search"
+  "home": "بيت",
+  "geofencing": "تحديد الموقع الجغرافي",
+  "settings": "إعدادات",
+  "selectLanguage": "اختار اللغة",
+  "changeLanguage": "تغيير اللغة",
+  "search": "يبحث",
+  "addGeofencing": "إضافة السياج الجغرافي",
+  "selectARange": "حدد نطاقًا",
+  "moveingOnExit": "الانتقال إلى الخروج",
+  "continue1": "يكمل",
+  "onExit": "عند الخروج",
+  "onEntry": "عند الدخول",
+  "whatsTheNameOfGeofencing": "ما هو اسم Geofencing",
+  "name": "اسم",
+
+  "english": "English",
+  "arabic": "Arabic",
+  "japanese": "Japanese",
+  "noDataFound": "لاتوجد بيانات"
 }
