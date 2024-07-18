@@ -1,7 +1,7 @@
 import 'package:dummy_api_call_retrofit/screens/app_lang/app_db.dart';
 import 'package:dummy_api_call_retrofit/screens/app_lang/app_language.dart';
 import 'package:dummy_api_call_retrofit/screens/model/geofencing_location.dart';
-import 'package:dummy_api_call_retrofit/screens/photos_list_screen.dart';
+import 'package:dummy_api_call_retrofit/screens/photos_list_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
