@@ -1,4 +1,3 @@
-//import 'package:dummy_api_call_retrofit/l10n/app_localizations.dart';
 import 'package:dummy_api_call_retrofit/screens/app_lang/app_db.dart';
 import 'package:dummy_api_call_retrofit/screens/app_lang/app_language.dart';
 import 'package:dummy_api_call_retrofit/screens/model/geofencing_location.dart';
@@ -37,9 +36,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _locale = Locale('en');
-
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -52,14 +48,15 @@ class _MyAppState extends State<MyApp> {
             designSize: const Size(390, 810),
             builder: (context, child) {
               return MaterialApp(
-                title: 'Flutter Demo',
+                debugShowCheckedModeBanner: false,
+                title: 'Practical Task',
                 theme: ThemeData(
                   colorScheme:
                       ColorScheme.fromSeed(seedColor: Colors.deepPurple),
                   useMaterial3: true,
                 ),
                 home: const PhotosListPage(),
-                localizationsDelegates: [
+                localizationsDelegates: const [
                   S.delegate,
                   GlobalMaterialLocalizations.delegate,
                   GlobalWidgetsLocalizations.delegate,

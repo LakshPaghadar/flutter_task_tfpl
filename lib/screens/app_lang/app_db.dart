@@ -24,8 +24,14 @@ class AppDB {
   Future<void> setValue<T>(key, T value) => _box.put(key, value);
 
   String get appLanguage => getValue("language", defaultValue: ENGLISH);
-
   set appLanguage(String update) => setValue("language", update);
+
+  double get lastLat => getValue("lastLat", defaultValue: 23.025101242098515);
+  set lastLat(double update) => setValue("lastLat", update);
+
+  //23.025101242098515
+  double get lastLong => getValue("lastLong", defaultValue: 72.5748821981208);
+  set lastLong(double update) => setValue("lastLong", update);
 
   List<GeofencingLocation> get locationList => getLocation("location_list");
 

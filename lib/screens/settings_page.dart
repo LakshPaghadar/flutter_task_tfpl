@@ -43,22 +43,9 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void dispose() {
     shippingSwitch.dispose();
+    listNotifier.dispose();
     super.dispose();
   }
-
-  /**
-   * japan
-   * //  "english": "英語",
-      //  "arabic": "アラビア語",
-      //  "japanese": "日本語"
-   *
-   *
-   * arbic
-   *
-   * "english": "إنجليزي",
-      "arabic": "عربي",
-      "japanese": "اليابانية"
-   */
 
   @override
   Widget build(BuildContext context) {
@@ -69,74 +56,71 @@ class _SettingsPageState extends State<SettingsPage> {
         title: S.of(context).settings,
         leadingIcon: true,
       ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25).r,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 10.h,
-              ),
-              Text(
-                S.of(context).changeLanguage,
-                style: textWhite18_700.copyWith(color: AppColor.color575B60),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              ValueListenableBuilder(
-                valueListenable: listNotifier,
-                builder: (context, value, child) {
-                  return ListView.builder(
-                    itemCount: lanList.length,
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Row(
-                        children: [
-                          Expanded(child: Text(lanList[index].lan)),
-                          FittedBox(
-                            fit: BoxFit.fill,
-                            child: Switch.adaptive(
-                              activeColor: AppColor.appColorBlue,
-                              value: lanList[index].isSelected,
-                              onChanged: (value) {
-                                if (value) {
-                                  lanList.forEach((element) {
-                                    element.isSelected = false;
-                                  });
-                                  lanList[index].isSelected = value;
-                                }
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25).r,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 10.h,
+            ),
+            Text(
+              S.of(context).changeLanguage,
+              style: textWhite18_700.copyWith(color: AppColor.color575B60),
+            ),
+            SizedBox(
+              height: 20.h,
+            ),
+            ValueListenableBuilder(
+              valueListenable: listNotifier,
+              builder: (context, value, child) {
+                return ListView.builder(
+                  itemCount: lanList.length,
+                  padding: EdgeInsets.zero,
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      children: [
+                        Expanded(child: Text(lanList[index].lan)),
+                        FittedBox(
+                          fit: BoxFit.fill,
+                          child: Switch.adaptive(
+                            activeColor: AppColor.appColorBlue,
+                            value: lanList[index].isSelected,
+                            onChanged: (value) {
+                              if (value) {
+                                lanList.forEach((element) {
+                                  element.isSelected = false;
+                                });
+                                lanList[index].isSelected = value;
+                              }
 
-                                if (lanList[0].isSelected) {
-                                  appDB.appLanguage = ENGLISH;
-                                  appLanguage
-                                      .changeLanguage(Locale(englishLocal));
-                                } else if (lanList[1].isSelected) {
-                                  appDB.appLanguage = ARABIC;
-                                  appLanguage
-                                      .changeLanguage(Locale(arabicLocal));
-                                } else {
-                                  appDB.appLanguage = JAPANESE;
-                                  appLanguage
-                                      .changeLanguage(Locale(japaneseLocal));
-                                }
+                              if (lanList[0].isSelected) {
+                                appDB.appLanguage = ENGLISH;
+                                appLanguage
+                                    .changeLanguage(const Locale(englishLocal));
+                              } else if (lanList[1].isSelected) {
+                                appDB.appLanguage = ARABIC;
+                                appLanguage
+                                    .changeLanguage(const Locale(arabicLocal));
+                              } else {
+                                appDB.appLanguage = JAPANESE;
+                                appLanguage.changeLanguage(
+                                    const Locale(japaneseLocal));
+                              }
 
-                                setState(() {});
-                              },
-                            ),
-                          )
-                        ],
-                      );
-                    },
-                  );
-                },
-              )
-            ],
-          ),
+                              setState(() {});
+                            },
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                );
+              },
+            )
+          ],
         ),
       ),
     );

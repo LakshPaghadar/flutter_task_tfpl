@@ -31,11 +31,11 @@ class AppButton extends StatelessWidget {
       height: 60.h,
       child: MaterialButton(
         elevation: elevation,
-        padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+        padding: const EdgeInsets.only(top: 15.0, bottom: 15.0).r,
         onPressed: callback,
-        color:  AppColor.appColorBlue,
+        color: AppColor.appColorBlue,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20).r),
+          borderRadius: BorderRadius.all(const Radius.circular(20).r),
         ),
         child: Text(
           label,

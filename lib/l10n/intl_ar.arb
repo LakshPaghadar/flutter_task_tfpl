@@ -26,5 +26,11 @@
   "arabic": "Arabic",
   "japanese": "Japanese",
   "noDataFound": "لاتوجد بيانات",
-  "save": "Save"
+
+  "save": "يحفظ",
+  "locationServicesAreDisabled": "تم تعطيل خدمات الموقع.",
+  "permissionDenienAllowFromSettings": "تم رفض السماح بالسماح من الإعدادات",
+  "locationPermission": "إذن الموقع",
+  "desc_text": "يرجى منح إذن الموقع في إعدادات موقع الجهاز للحصول على وظائف إضافية.",
+  "toEnableThisclickDeviceLocationSettingsBelowAndActivateThis": "لتمكين هذا، انقر فوق إعدادات موقع الجهاز أدناه وقم بتنشيط هذه الميزة ضمن قائمة الأذونات"
 }

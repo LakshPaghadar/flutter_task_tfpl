@@ -68,6 +68,5 @@ flutter {
 }
 
 dependencies {
-    //classpath 'com.android.tools.build:gradle:7.3.1' // downloads 1.7.1 Metadata
-    //classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
 }

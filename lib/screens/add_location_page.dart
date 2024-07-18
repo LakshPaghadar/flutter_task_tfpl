@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dummy_api_call_retrofit/screens/app_lang/app_db.dart';
 import 'package:dummy_api_call_retrofit/screens/model/geofencing_location.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../generated/l10n.dart';
@@ -22,119 +24,137 @@ class AddLocationPage extends StatefulWidget {
 }
 
 class _AddLocationPageState extends State<AddLocationPage> {
-  Completer<GoogleMapController> _controller = Completer();
-  static const LatLng _center = const LatLng(23.033863, 72.585022);
-  ValueNotifier<double> _currentSliderValue = ValueNotifier(3);
+  final Completer<GoogleMapController> _controller = Completer();
+
+  GoogleMapController? mapController;
+  final ValueNotifier<double> _currentSliderValue = ValueNotifier(1);
+  final ValueNotifier<int> _radiusNotifier = ValueNotifier(1);
   ValueNotifier<bool> entrySwitch = ValueNotifier(true);
   ValueNotifier<bool> exitSwitch = ValueNotifier(false);
   TextEditingController nameController = TextEditingController();
 
-  // final _geofenceService = GeofenceService.instance.setup(
-  //     interval: 5000,
-  //     accuracy: 100,
-  //     loiteringDelayMs: 60000,
-  //     statusChangeDelayMs: 10000,
-  //     useActivityRecognition: true,
-  //     allowMockLocations: false,
-  //     printDevLog: false,
-  //     geofenceRadiusSortType: GeofenceRadiusSortType.DESC);
-
-  //Position? _currentPosition;
-  // double _currentLat = 23.033863;
-  // double _currentLong = 72.585022;
-
-  double _currentLat = 0;
-  double _currentLong = 0;
+  double _currentLat = appDB.lastLat;
+  double _currentLong = appDB.lastLong;
 
   @override
   void initState() {
     super.initState();
+    debugPrint("DEFAULT LOCATION ${_currentLat} | ${_currentLong}");
     getCurrentLocation(context);
-    //_requestLocationPermission();
-    // // _geofenceService
-    //     .start(_geofenceList)
-    //     .catchError(_onError); // Request location permission on initialization
   }
-  //
-  // void _onError(error) {
-  //   final errorCode = getErrorCodesFromError(error);
-  //   if (errorCode == null) {
-  //     print('Undefined error: $error');
-  //     return;
-  //   }
-  //
-  //   print('ErrorCode: $errorCode');
-  // }
-  // Request location permission
-  // void _requestLocationPermission() async {
-  //   PermissionStatus status = await Permission.location.status;
-  //   if (status == PermissionStatus.granted) {
-  //     _getCurrentLocation();
-  //   } else {
-  //     _requestPermission();
-  //   }
-  // }
 
-  // Future<void> _requestPermission() async {
-  //   PermissionStatus status = await Permission.location.request();
-  //   if (status == PermissionStatus.granted) {
-  //     _getCurrentLocation();
-  //   } else {
-  //     _requestPermission();
-  //   }
-  // }
+  @override
+  void dispose() {
+    _currentSliderValue.dispose();
+    _radiusNotifier.dispose();
+    entrySwitch.dispose();
+    exitSwitch.dispose();
 
-  // GeofenceService getObjectGEO() {
-  //   final _geofenceService = GeofenceService.instance.setup(
-  //       interval: 5000,
-  //       accuracy: 100,
-  //       loiteringDelayMs: 60000,
-  //       statusChangeDelayMs: 10000,
-  //       useActivityRecognition: true,
-  //       allowMockLocations: false,
-  //       printDevLog: false,
-  //       geofenceRadiusSortType: GeofenceRadiusSortType.DESC);
-  //   return _geofenceService;
-  // }
+    super.dispose();
+  }
 
-  // Create a [Geofence] list.
-  // final _geofenceList = <Geofence>[
-  //   Geofence(
-  //     id: 'place_1',
-  //     latitude: 23.033863,
-  //     longitude: 72.585022,
-  //     radius: [
-  //       GeofenceRadius(id: 'radius_100m', length: 100),
-  //       GeofenceRadius(id: 'radius_25m', length: 25),
-  //       GeofenceRadius(id: 'radius_250m', length: 250),
-  //       GeofenceRadius(id: 'radius_200m', length: 200),
-  //     ],
-  //   ),
-  // ];
+  checkLocationPermission() async {
+    if (Platform.isAndroid) {
+      debugPrint('isAndroid');
+      if (!await Permission.location.request().isPermanentlyDenied) {
+        if (await Permission.location.isDenied) {
+          checkLocationPermission();
+        } else {
+          getCurrentLocation(context);
+        }
+      } else if (await Permission.location.request().isPermanentlyDenied) {
+        showLocationSettingDialog();
+      }
+      //21.52401909240622, 70.45554851358295
+    } else {
+      var status = await Permission.location.request();
+      if (status.isPermanentlyDenied) {
+        if (!mounted) return;
+        showLocationSettingDialog();
+      } else {
+        getCurrentLocation(context);
+      }
+    }
+  }
+
+  showLocationSettingDialog() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () => Future.value(false),
+          child: AlertDialog(
+              title: Text(
+                "Location Permission",
+                textAlign: TextAlign.center,
+                style: textBold.copyWith(fontSize: 18.sp, color: Colors.black),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Text(
+                      "Please grant location permission in Device location Settings for additional functionality.",
+                      maxLines: 3,
+                      style: textRegular.copyWith(
+                          fontSize: 15.sp, color: Colors.black),
+                    ),
+                  ),
+                  10.0.verticalSpace,
+                  Flexible(
+                    child: Text(
+                      'To enable this,click Device location Settings below and activate this feature under the Permissions menu',
+                      maxLines: 3,
+                      style: textRegular.copyWith(
+                          fontSize: 15.sp, color: Colors.black),
+                    ),
+                  )
+                ],
+              ),
+              actions: [
+                Center(
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.primaryColor, elevation: 0),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        //shouldRequestPermission = true;
+                        openAppSettings();
+                      },
+                      child: Text(
+                        "Device location Settings",
+                        style: textMedium.copyWith(
+                            fontSize: 16.sp, color: Colors.white),
+                      )),
+                )
+              ]),
+        );
+      },
+    );
+  }
 
   Future<LatLng> getCurrentLocation(BuildContext context) async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      throw Exception("Location services are disabled.");
+      throw Exception(S.of(context).locationServicesAreDisabled);
     } else {
-      debugPrint("Get current location manager");
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
-
       _currentLat = position.latitude;
       _currentLong = position.longitude;
 
-      debugPrint("Location lat long  $_currentLat  $_currentLong");
-
       setState(() {});
 
-      GoogleMapController controller = await _controller.future;
-      controller.animateCamera(
+      mapController = await _controller.future;
+      mapController?.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
             target: LatLng(_currentLat, _currentLong),
-            zoom: 15.0,
+            zoom: getZoomValue(_radiusNotifier.value),
           ),
         ),
       );
@@ -143,56 +163,19 @@ class _AddLocationPageState extends State<AddLocationPage> {
     }
   }
 
-  // Set<Circle> circles = Set.from([
-  //   Circle(
-  //     circleId: CircleId('geo_fence_1'),
-  //     center: LatLng(
-  //       _currentLat!,
-  //       _currentLong!,
-  //     ),
-  //     radius: 200,
-  //     strokeWidth: 2,
-  //     strokeColor: Colors.green,
-  //     fillColor: Colors.green.withOpacity(0.15),
-  //   ),
-  // ]);
-
-  // void _getCurrentLocation() async {
-  //   try {
-  //     final position = await Geolocator.getCurrentPosition(
-  //         /*desiredAccuracy: LocationAccuracy.high*/);
-  //     _currentPosition = position;
-  //     //_currentlatlng.latitude=position.latitude
-  //     _currentLat = position.latitude;
-  //     _currentLong = position.longitude;
-  //     print("LOCATION ${position.latitude} || ${position.longitude}");
-  //
-  //     _moveCameraToCurrentLocation();
-  //   } catch (e) {
-  //     print('Error getting location: $e');
-  //   }
-  // }
-
-  // void _moveCameraToCurrentLocation() {
-  //   if (_controller.isCompleted) {
-  //     _controller.future.then((controller) {
-  //       controller.animateCamera(CameraUpdate.newCameraPosition(
-  //         CameraPosition(
-  //           target: LatLng(
-  //               _currentPosition!.latitude!, _currentPosition!.longitude!),
-  //           zoom: 15,
-  //         ),
-  //       ));
-  //     });
-  //   }
-  // }
+  void zoomOut() {
+    setState(() {
+      mapController?.animateCamera(
+          CameraUpdate.zoomTo(getZoomValue(_radiusNotifier.value)));
+    });
+  }
 
   Set<Marker> _createMarkers() {
     return {
       Marker(
-        markerId: MarkerId('current_location'),
+        markerId: const MarkerId('current_location'),
         position: LatLng(_currentLat, _currentLong),
-        infoWindow: InfoWindow(title: 'Your Location'),
+        infoWindow: InfoWindow(title: S.of(context).yourLocation),
       ),
     };
   }
@@ -209,35 +192,40 @@ class _AddLocationPageState extends State<AddLocationPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              height: 450.h,
-              width: 1.sw,
-              child: GoogleMap(
-                  circles: {
-                    Circle(
-                      circleId: CircleId('geo_fence_1'),
-                      center: LatLng(
-                        _currentLat,
-                        _currentLong,
+            ValueListenableBuilder(
+              valueListenable: _radiusNotifier,
+              builder: (context, value, child) {
+                return SizedBox(
+                  height: 450.h,
+                  width: 1.sw,
+                  child: GoogleMap(
+                    circles: {
+                      Circle(
+                        circleId: const CircleId('geo_fence_1'),
+                        center: LatLng(
+                          _currentLat,
+                          _currentLong,
+                        ),
+                        radius: value * 100,
+                        strokeWidth: 2,
+                        strokeColor: Colors.green,
+                        fillColor: Colors.green.withOpacity(0.15),
                       ),
-                      radius: 200,
-                      strokeWidth: 2,
-                      strokeColor: Colors.green,
-                      fillColor: Colors.green.withOpacity(0.15),
+                    },
+                    onMapCreated: (controller) {
+                      _controller.complete(controller);
+                      mapController = controller;
+                    },
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(_currentLat, _currentLong),
+                      zoom: getZoomValue(_radiusNotifier.value),
                     ),
-                  },
-                  onMapCreated: (controller) {
-                    _controller.complete(controller);
-                  },
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(_currentLat, _currentLong),
-                    zoom: 8.0,
+                    myLocationButtonEnabled: true,
+                    myLocationEnabled: true,
+                    markers: _createMarkers(),
                   ),
-                  myLocationButtonEnabled: true,
-                  myLocationEnabled: true,
-                  markers: _createMarkers()
-                  //markers: _currentPosition != null ? () : Set(),
-                  ),
+                );
+              },
             ),
             _showRangeView()
           ],
@@ -269,7 +257,6 @@ class _AddLocationPageState extends State<AddLocationPage> {
                 valueListenable: _currentSliderValue,
                 builder: (BuildContext context, double value, Widget? child) {
                   return SfSlider(
-                    //label: "${_currentSliderValue.value} km",
                     activeColor: AppColor.favColor,
                     min: 1,
                     max: 10,
@@ -279,13 +266,24 @@ class _AddLocationPageState extends State<AddLocationPage> {
                     minorTicksPerInterval: 1,
                     value: _currentSliderValue.value,
                     labelFormatterCallback: (actualValue, formattedText) {
-                      return "${actualValue} km";
+                      return "$actualValue km";
                     },
                     tooltipTextFormatterCallback: (actualValue, formattedText) {
                       return "${_currentSliderValue.value.toInt()} km";
                     },
                     onChanged: (value) {
                       _currentSliderValue.value = value;
+                      debugPrint(
+                          "RADIUS_CHANGE + value : $value | rn : ${_radiusNotifier.value}");
+
+                      debugPrint(
+                          "RADIUS_CHANGE + Int : ${value.toInt()} | rn : ${_currentSliderValue.value.toInt()}");
+
+                      if (value.toInt() == _radiusNotifier.value) {
+                      } else {
+                        _radiusNotifier.value = value.toInt();
+                        zoomOut();
+                      }
                     },
                   );
                 },
@@ -375,6 +373,33 @@ class _AddLocationPageState extends State<AddLocationPage> {
         ));
   }
 
+  double getZoomValue(int radius) {
+    switch (radius) {
+      case 1:
+        return 17.0;
+      case 2:
+        return 17.0;
+      case 3:
+        return 16.0;
+      case 4:
+        return 16.0;
+      case 5:
+        return 15.0;
+      case 6:
+        return 15.0;
+      case 7:
+        return 15.0;
+      case 8:
+        return 15.0;
+      case 9:
+        return 14.0;
+      case 10:
+        return 14.0;
+      default:
+        return 15.0;
+    }
+  }
+
   Future showNameBottomSheet() {
     return showModalBottomSheet(
       context: context,
@@ -412,13 +437,13 @@ class _AddLocationPageState extends State<AddLocationPage> {
                               color: AppColor.santasGray.withOpacity(0.5),
                             ),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(10).r)),
+                                BorderRadius.all(const Radius.circular(10).r)),
                         enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: AppColor.santasGray.withOpacity(0.5),
                             ),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(10).r)),
+                                BorderRadius.all(const Radius.circular(10).r)),
                       ),
                     ),
                     SizedBox(
@@ -429,13 +454,16 @@ class _AddLocationPageState extends State<AddLocationPage> {
                       () {
                         var nameS = nameController.text.toString();
                         List<GeofencingLocation> list = appDB.locationList;
-                        list.add(GeofencingLocation(
-                            name: nameS,
-                            isEntry: entrySwitch.value,
-                            isExit: exitSwitch.value,
-                            distance: _currentSliderValue.value.toInt(),
-                            latitude: _currentLat!,
-                            longitude: _currentLong!));
+                        list.add(
+                          GeofencingLocation(
+                              name: nameS,
+                              isEntry: entrySwitch.value,
+                              isExit: exitSwitch.value,
+                              distance: _currentSliderValue.value.toInt(),
+                              latitude: _currentLat,
+                              longitude: _currentLong,
+                              radius: _radiusNotifier.value),
+                        );
                         appDB.locationList = list;
 
                         Navigator.pop(context);

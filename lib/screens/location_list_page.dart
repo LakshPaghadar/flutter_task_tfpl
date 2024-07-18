@@ -1,13 +1,11 @@
-import 'dart:async';
-
 import 'package:dummy_api_call_retrofit/generated/assets.dart';
 import 'package:dummy_api_call_retrofit/screens/add_location_page.dart';
 import 'package:dummy_api_call_retrofit/screens/widgets/base_app_bar.dart';
+import 'package:dummy_api_call_retrofit/screens/widgets/google_map_widget.dart';
 import 'package:dummy_api_call_retrofit/values/colors.dart';
 import 'package:dummy_api_call_retrofit/values/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../generated/l10n.dart';
@@ -21,6 +19,11 @@ class LocationListPage extends StatefulWidget {
 }
 
 class _LocationListPageState extends State<LocationListPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +43,7 @@ class _LocationListPageState extends State<LocationListPage> {
           SizedBox(
             height: 20.h,
           ),
-          listView()
+          buildLocationListView()
         ],
       ),
     );
@@ -87,10 +90,7 @@ class _LocationListPageState extends State<LocationListPage> {
     );
   }
 
-  Widget listView() {
-    //print("LOCATION_LIST ${appDB.locationList}");
-    Completer<GoogleMapController> _controller = Completer();
-    LatLng _center = const LatLng(23.033863, 72.585022);
+  Widget buildLocationListView() {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -98,7 +98,6 @@ class _LocationListPageState extends State<LocationListPage> {
           valueListenable: Hive.box('_appDbBox').listenable(),
           builder: (context, value, child) {
             return ListView.builder(
-              //shrinkWrap: true,
               itemCount: appDB.locationList.length,
               itemBuilder: (context, index) {
                 return Column(
@@ -116,14 +115,8 @@ class _LocationListPageState extends State<LocationListPage> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(
                                     const Radius.circular(20).r)),
-                            child: GoogleMap(
-                              onMapCreated: (controller) {
-                                _controller.complete(controller);
-                              },
-                              initialCameraPosition: CameraPosition(
-                                target: _center,
-                                zoom: 8.0,
-                              ),
+                            child: GoogleMapWidget(
+                              selectedLocation: appDB.locationList[index],
                             ),
                           ),
                           SizedBox(
@@ -158,12 +151,16 @@ class _LocationListPageState extends State<LocationListPage> {
                                     ),
                                     Container(
                                       decoration: BoxDecoration(
-                                          color: AppColor.color898A8B,
-                                      borderRadius: BorderRadius.all(Radius.circular(10).r),),
-                                      child:
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 2).r,
-                                            child: appDB.locationList[index].isEntry ==
+                                        color: AppColor.color898A8B,
+                                        borderRadius: BorderRadius.all(
+                                            const Radius.circular(10).r),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                                horizontal: 4, vertical: 2)
+                                            .r,
+                                        child:
+                                            appDB.locationList[index].isEntry ==
                                                     true
                                                 ? Text(
                                                     S.of(context).onEntry,
@@ -173,7 +170,7 @@ class _LocationListPageState extends State<LocationListPage> {
                                                     S.of(context).onExit,
                                                     style: textBlack12_400,
                                                   ),
-                                          ),
+                                      ),
                                     ),
                                   ],
                                 ),

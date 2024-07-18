@@ -279,6 +279,66 @@ class S {
       args: [],
     );
   }
+
+  /// `Location services are disabled.`
+  String get locationServicesAreDisabled {
+    return Intl.message(
+      'Location services are disabled.',
+      name: 'locationServicesAreDisabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your Location`
+  String get yourLocation {
+    return Intl.message(
+      'Your Location',
+      name: 'yourLocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Permission denied allow from settings`
+  String get permissionDenienAllowFromSettings {
+    return Intl.message(
+      'Permission denied allow from settings',
+      name: 'permissionDenienAllowFromSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Location Permission`
+  String get locationPermission {
+    return Intl.message(
+      'Location Permission',
+      name: 'locationPermission',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please grant location permission in Device location Settings for additional functionality.`
+  String get desc_text {
+    return Intl.message(
+      'Please grant location permission in Device location Settings for additional functionality.',
+      name: 'desc_text',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To enable this,click Device location Settings below and activate this feature under the Permissions menu`
+  String get toEnableThisclickDeviceLocationSettingsBelowAndActivateThis {
+    return Intl.message(
+      'To enable this,click Device location Settings below and activate this feature under the Permissions menu',
+      name: 'toEnableThisclickDeviceLocationSettingsBelowAndActivateThis',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

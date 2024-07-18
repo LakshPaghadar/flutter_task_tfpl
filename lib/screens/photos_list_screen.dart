@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dummy_api_call_retrofit/notwork/store/post_store.dart';
+import 'package:dummy_api_call_retrofit/screens/app_lang/app_db.dart';
 import 'package:dummy_api_call_retrofit/screens/location_list_page.dart';
 import 'package:dummy_api_call_retrofit/screens/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +9,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mobx/mobx.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../generated/l10n.dart';
 import '../values/colors.dart';
+import '../values/style.dart';
 import 'image_card.dart';
 
 class PhotosListPage extends StatefulWidget {
@@ -20,28 +25,147 @@ class PhotosListPage extends StatefulWidget {
 
 class _PhotosListPageState extends State<PhotosListPage> {
   ValueNotifier<bool> isLoading = ValueNotifier(false);
-  ValueNotifier<bool> isLoading2 = ValueNotifier(false);
+  ValueNotifier<bool> paginationLoading = ValueNotifier(false);
   List<ReactionDisposer>? disposer;
-  ScrollController _scrollController = ScrollController();
-  var _searchController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  final _searchController = TextEditingController();
   int _page = 1;
   final int _perPage = 10;
+
   @override
   void initState() {
     super.initState();
+    checkLocationPermission();
     Geolocator.isLocationServiceEnabled();
     registerReactions();
     _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      //isLoading.value = true;
-      isLoading2.value = true;
+      paginationLoading.value = true;
       await postStore.getPhotosList(_page, _perPage);
-      //isLoading.value = false;
-      isLoading2.value = false;
+      paginationLoading.value = false;
     });
     _searchController.addListener(() {
       postStore.photosList;
     });
+  }
+
+  Future getCurrentLocation(BuildContext context) async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      throw Exception(S.of(context).locationServicesAreDisabled);
+    } else {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      appDB.lastLat = position.latitude;
+      appDB.lastLong = position.longitude;
+    }
+  }
+
+  checkLocationPermission() async {
+    if (Platform.isAndroid) {
+      if (!await Permission.location.request().isPermanentlyDenied) {
+        //Allow
+        detectLocation();
+      } else if (await Permission.location.request().isPermanentlyDenied) {
+        if (!mounted) return;
+        //go to settings
+        showLocationSettingDialog();
+      }
+    } else {
+      var status = await Permission.location.request();
+      if (status.isGranted) {
+        //Allow
+        detectLocation();
+      } else if (status.isDenied) {
+        //Allow
+        detectLocation();
+      } else if (status.isPermanentlyDenied) {
+        if (!mounted) return;
+        //open settings
+        showLocationSettingDialog();
+      }
+    }
+  }
+
+  detectLocation() async {
+    bool serviceEnabled;
+    // LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      bool service = await Geolocator.isLocationServiceEnabled();
+      return;
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    appDB.lastLat = position.latitude;
+    appDB.lastLong = position.longitude;
+  }
+
+  showLocationSettingDialog() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () => Future.value(false),
+          child: AlertDialog(
+            title: Text(
+              S.of(context).locationPermission,
+              textAlign: TextAlign.center,
+              style: textBold.copyWith(fontSize: 18.sp, color: Colors.black),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: Text(
+                    S.of(context).desc_text,
+                    maxLines: 3,
+                    style: textRegular.copyWith(
+                        fontSize: 15.sp, color: Colors.black),
+                  ),
+                ),
+                10.0.verticalSpace,
+                Flexible(
+                  child: Text(
+                    S
+                        .of(context)
+                        .toEnableThisclickDeviceLocationSettingsBelowAndActivateThis,
+                    maxLines: 3,
+                    style: textRegular.copyWith(
+                        fontSize: 15.sp, color: Colors.black),
+                  ),
+                )
+              ],
+            ),
+            actions: [
+              Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.primaryColor, elevation: 0),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    openAppSettings();
+                  },
+                  child: Text(
+                    "Device location Settings",
+                    style: textMedium.copyWith(
+                        fontSize: 16.sp, color: Colors.white),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void registerReactions() {
@@ -49,7 +173,7 @@ class _PhotosListPageState extends State<PhotosListPage> {
       reaction((p0) => postStore.photosList, (list) {
         debugPrint("LIST_LIST : ${list.length}");
         if (list.isNotEmpty) {
-          isLoading2.value = false;
+          paginationLoading.value = false;
           setState(() {});
         }
       }),
@@ -60,7 +184,7 @@ class _PhotosListPageState extends State<PhotosListPage> {
       reaction((p0) => postStore.photosList, (list) {
         debugPrint("LIST_LIST : ${list.length}");
         if (list.isNotEmpty) {
-          isLoading2.value = false;
+          paginationLoading.value = false;
         }
       }),
     ];
@@ -78,6 +202,10 @@ class _PhotosListPageState extends State<PhotosListPage> {
 
   @override
   void dispose() {
+    _searchController.dispose();
+    _scrollController.dispose();
+    paginationLoading.dispose();
+    isLoading.dispose();
     removeReactions();
     super.dispose();
   }
@@ -99,29 +227,29 @@ class _PhotosListPageState extends State<PhotosListPage> {
               Navigator.of(context).pop();
             },
             child: ListTile(
-              leading: Icon(Icons.message),
+              leading: const Icon(Icons.message),
               title: Text(S.of(context).home),
             ),
           ),
           GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => LocationListPage()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const LocationListPage()));
             },
             child: ListTile(
-              leading: Icon(Icons.account_circle),
+              leading: const Icon(Icons.account_circle),
               title: Text(S.of(context).geofencing),
             ),
           ),
           GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SettingsPage()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const SettingsPage()));
             },
             child: ListTile(
-              leading: Icon(Icons.settings),
+              leading: const Icon(Icons.settings),
               title: Text(S.of(context).settings),
             ),
           ),
@@ -155,7 +283,7 @@ class _PhotosListPageState extends State<PhotosListPage> {
                   return child!;
                 }
               },
-              child: observeResponse(),
+              child: buildPhotoListView(),
             ),
           )
         ],
@@ -163,7 +291,7 @@ class _PhotosListPageState extends State<PhotosListPage> {
     );
   }
 
-  Widget observeResponse() {
+  Widget buildPhotoListView() {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Observer(
@@ -195,15 +323,14 @@ class _PhotosListPageState extends State<PhotosListPage> {
   }
 
   Future<void> _loadData() async {
-    if (!isLoading2.value) {
+    if (!paginationLoading.value) {
       setState(() {
-        isLoading2.value = true;
+        paginationLoading.value = true;
       });
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
       await postStore.getPhotosList(_page, _perPage);
-
       setState(() {
-        isLoading2.value = false;
+        paginationLoading.value = false;
         _page = _page + 10;
       });
     }

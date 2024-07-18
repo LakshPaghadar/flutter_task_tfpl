@@ -33,6 +33,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "connectionTimedOut": MessageLookupByLibrary.simpleMessage(
             "The connection has timed out. Please try again"),
         "continue1": MessageLookupByLibrary.simpleMessage("يكمل"),
+        "desc_text": MessageLookupByLibrary.simpleMessage(
+            "يرجى منح إذن الموقع في إعدادات موقع الجهاز للحصول على وظائف إضافية."),
         "english": MessageLookupByLibrary.simpleMessage("English"),
         "geofencing":
             MessageLookupByLibrary.simpleMessage("تحديد الموقع الجغرافي"),
@@ -40,17 +42,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "invalidCredentials":
             MessageLookupByLibrary.simpleMessage("Invalid credentials"),
         "japanese": MessageLookupByLibrary.simpleMessage("Japanese"),
+        "locationPermission":
+            MessageLookupByLibrary.simpleMessage("إذن الموقع"),
+        "locationServicesAreDisabled":
+            MessageLookupByLibrary.simpleMessage("تم تعطيل خدمات الموقع."),
         "moveingOnExit":
             MessageLookupByLibrary.simpleMessage("الانتقال إلى الخروج"),
         "name": MessageLookupByLibrary.simpleMessage("اسم"),
         "noDataFound": MessageLookupByLibrary.simpleMessage("لاتوجد بيانات"),
         "onEntry": MessageLookupByLibrary.simpleMessage("عند الدخول"),
         "onExit": MessageLookupByLibrary.simpleMessage("عند الخروج"),
-        "save": MessageLookupByLibrary.simpleMessage("Save"),
+        "permissionDenienAllowFromSettings":
+            MessageLookupByLibrary.simpleMessage(
+                "تم رفض السماح بالسماح من الإعدادات"),
+        "save": MessageLookupByLibrary.simpleMessage("يحفظ"),
         "search": MessageLookupByLibrary.simpleMessage("يبحث"),
         "selectARange": MessageLookupByLibrary.simpleMessage("حدد نطاقًا"),
         "selectLanguage": MessageLookupByLibrary.simpleMessage("اختار اللغة"),
         "settings": MessageLookupByLibrary.simpleMessage("إعدادات"),
+        "toEnableThisclickDeviceLocationSettingsBelowAndActivateThis":
+            MessageLookupByLibrary.simpleMessage(
+                "لتمكين هذا، انقر فوق إعدادات موقع الجهاز أدناه وقم بتنشيط هذه الميزة ضمن قائمة الأذونات"),
         "whatsTheNameOfGeofencing":
             MessageLookupByLibrary.simpleMessage("ما هو اسم Geofencing")
       };

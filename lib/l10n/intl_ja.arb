@@ -26,5 +26,11 @@
   "arabic": "Arabic",
   "japanese": "Japanese",
   "noDataFound": "何もデータが見つかりませんでした",
-  "save": "Save"
+
+  "save": "保存",
+  "locationServicesAreDisabled": "位置情報サービスが無効になっています。",
+  "permissionDenienAllowFromSettings": "許可が拒否されました 設定から許可します",
+  "locationPermission": "位置許可",
+  "desc_text": "追加機能を使用するには、デバイスの位置情報設定で位置情報の許可を付与してください。",
+  "toEnableThisclickDeviceLocationSettingsBelowAndActivateThis": "これを有効にするには、下の [デバイスの位置設定] をクリックし、[許可] メニューでこの機能を有効にします。"
 }

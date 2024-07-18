@@ -33,24 +33,37 @@ class MessageLookup extends MessageLookupByLibrary {
         "connectionTimedOut": MessageLookupByLibrary.simpleMessage(
             "The connection has timed out. Please try again"),
         "continue1": MessageLookupByLibrary.simpleMessage("Continue"),
+        "desc_text": MessageLookupByLibrary.simpleMessage(
+            "Please grant location permission in Device location Settings for additional functionality."),
         "english": MessageLookupByLibrary.simpleMessage("English"),
         "geofencing": MessageLookupByLibrary.simpleMessage("Geofencing"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
         "invalidCredentials":
             MessageLookupByLibrary.simpleMessage("Invalid credentials"),
         "japanese": MessageLookupByLibrary.simpleMessage("Japanese"),
+        "locationPermission":
+            MessageLookupByLibrary.simpleMessage("Location Permission"),
+        "locationServicesAreDisabled": MessageLookupByLibrary.simpleMessage(
+            "Location services are disabled."),
         "moveingOnExit": MessageLookupByLibrary.simpleMessage("Moving on Exit"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
         "noDataFound": MessageLookupByLibrary.simpleMessage("No Data found"),
         "onEntry": MessageLookupByLibrary.simpleMessage("On Entry"),
         "onExit": MessageLookupByLibrary.simpleMessage("On Exit"),
+        "permissionDenienAllowFromSettings":
+            MessageLookupByLibrary.simpleMessage(
+                "Permission denied allow from settings"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
         "selectARange": MessageLookupByLibrary.simpleMessage("Select a Range"),
         "selectLanguage":
             MessageLookupByLibrary.simpleMessage("Select Language"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
+        "toEnableThisclickDeviceLocationSettingsBelowAndActivateThis":
+            MessageLookupByLibrary.simpleMessage(
+                "To enable this,click Device location Settings below and activate this feature under the Permissions menu"),
         "whatsTheNameOfGeofencing": MessageLookupByLibrary.simpleMessage(
-            "What\'s the name of Geofencing")
+            "What\'s the name of Geofencing"),
+        "yourLocation": MessageLookupByLibrary.simpleMessage("Your Location")
       };
 }

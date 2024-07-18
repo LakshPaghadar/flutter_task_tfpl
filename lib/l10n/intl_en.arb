@@ -25,5 +25,11 @@
   "arabic": "Arabic",
   "japanese": "Japanese",
   "noDataFound": "No Data found",
-  "save": "Save"
+  "save": "Save",
+  "locationServicesAreDisabled": "Location services are disabled.",
+  "yourLocation": "Your Location",
+  "permissionDenienAllowFromSettings": "Permission denied allow from settings",
+  "locationPermission": "Location Permission",
+  "desc_text": "Please grant location permission in Device location Settings for additional functionality.",
+  "toEnableThisclickDeviceLocationSettingsBelowAndActivateThis": "To enable this,click Device location Settings below and activate this feature under the Permissions menu"
 }

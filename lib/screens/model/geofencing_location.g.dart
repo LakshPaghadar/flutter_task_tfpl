@@ -23,13 +23,14 @@ class GeofencingLocationAdapter extends TypeAdapter<GeofencingLocation> {
       latitude: fields[3] as double,
       longitude: fields[4] as double,
       distance: fields[5] as int,
+      radius: fields[6] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, GeofencingLocation obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class GeofencingLocationAdapter extends TypeAdapter<GeofencingLocation> {
       ..writeByte(4)
       ..write(obj.longitude)
       ..writeByte(5)
-      ..write(obj.distance);
+      ..write(obj.distance)
+      ..writeByte(6)
+      ..write(obj.radius);
   }
 
   @override
@@ -67,6 +70,7 @@ GeofencingLocation _$GeofencingLocationFromJson(Map<String, dynamic> json) =>
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
       distance: (json['distance'] as num).toInt(),
+      radius: (json['radius'] as num).toInt(),
     );
 
 Map<String, dynamic> _$GeofencingLocationToJson(GeofencingLocation instance) =>
@@ -77,4 +81,5 @@ Map<String, dynamic> _$GeofencingLocationToJson(GeofencingLocation instance) =>
       'latitude': instance.latitude,
       'longitude': instance.longitude,
       'distance': instance.distance,
+      'radius': instance.radius,
     };

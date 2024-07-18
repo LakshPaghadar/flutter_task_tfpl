@@ -30,6 +30,10 @@ class GeofencingLocation extends HiveObject {
   @JsonKey(name: "distance")
   final int distance;
 
+  @HiveField(6)
+  @JsonKey(name: "radius")
+  final int radius;
+
   GeofencingLocation({
     required this.name,
     required this.isEntry,
@@ -37,6 +41,7 @@ class GeofencingLocation extends HiveObject {
     required this.latitude,
     required this.longitude,
     required this.distance,
+    required this.radius,
   });
 
   GeofencingLocation copyWith({
@@ -46,6 +51,7 @@ class GeofencingLocation extends HiveObject {
     double? latitude,
     double? longitude,
     int? distance,
+    int? radius,
   }) =>
       GeofencingLocation(
         name: name ?? this.name,
@@ -54,6 +60,7 @@ class GeofencingLocation extends HiveObject {
         latitude: latitude ?? this.latitude,
         longitude: longitude ?? this.longitude,
         distance: distance ?? this.distance,
+        radius: radius ?? this.distance,
       );
 
   factory GeofencingLocation.fromJson(Map<String, dynamic> json) =>

@@ -32,22 +32,32 @@ class MessageLookup extends MessageLookupByLibrary {
         "connectionTimedOut": MessageLookupByLibrary.simpleMessage(
             "The connection has timed out. Please try again"),
         "continue1": MessageLookupByLibrary.simpleMessage("続く"),
+        "desc_text": MessageLookupByLibrary.simpleMessage(
+            "追加機能を使用するには、デバイスの位置情報設定で位置情報の許可を付与してください。"),
         "english": MessageLookupByLibrary.simpleMessage("English"),
         "geofencing": MessageLookupByLibrary.simpleMessage("ジオフェンシング"),
         "home": MessageLookupByLibrary.simpleMessage("家"),
         "invalidCredentials":
             MessageLookupByLibrary.simpleMessage("Invalid credentials"),
         "japanese": MessageLookupByLibrary.simpleMessage("Japanese"),
+        "locationPermission": MessageLookupByLibrary.simpleMessage("位置許可"),
+        "locationServicesAreDisabled":
+            MessageLookupByLibrary.simpleMessage("位置情報サービスが無効になっています。"),
         "moveingOnExit": MessageLookupByLibrary.simpleMessage("出口で移動する"),
         "name": MessageLookupByLibrary.simpleMessage("名前"),
         "noDataFound": MessageLookupByLibrary.simpleMessage("何もデータが見つかりませんでした"),
         "onEntry": MessageLookupByLibrary.simpleMessage("入場時"),
         "onExit": MessageLookupByLibrary.simpleMessage("出口時"),
-        "save": MessageLookupByLibrary.simpleMessage("Save"),
+        "permissionDenienAllowFromSettings":
+            MessageLookupByLibrary.simpleMessage("許可が拒否されました 設定から許可します"),
+        "save": MessageLookupByLibrary.simpleMessage("保存"),
         "search": MessageLookupByLibrary.simpleMessage("検索"),
         "selectARange": MessageLookupByLibrary.simpleMessage("範囲を選択してください"),
         "selectLanguage": MessageLookupByLibrary.simpleMessage("言語を選択する"),
         "settings": MessageLookupByLibrary.simpleMessage("設定"),
+        "toEnableThisclickDeviceLocationSettingsBelowAndActivateThis":
+            MessageLookupByLibrary.simpleMessage(
+                "これを有効にするには、下の [デバイスの位置設定] をクリックし、[許可] メニューでこの機能を有効にします。"),
         "whatsTheNameOfGeofencing":
             MessageLookupByLibrary.simpleMessage("ジオフェンシングの名前は何ですか")
       };
