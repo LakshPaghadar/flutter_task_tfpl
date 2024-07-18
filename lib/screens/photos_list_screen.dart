@@ -4,6 +4,7 @@ import 'package:dummy_api_call_retrofit/screens/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mobx/mobx.dart';
 
 import '../generated/l10n.dart';
@@ -28,6 +29,7 @@ class _PhotosListPageState extends State<PhotosListPage> {
   @override
   void initState() {
     super.initState();
+    Geolocator.isLocationServiceEnabled();
     registerReactions();
     _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {

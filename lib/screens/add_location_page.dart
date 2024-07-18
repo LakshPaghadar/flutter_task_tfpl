@@ -5,9 +5,8 @@ import 'package:dummy_api_call_retrofit/screens/model/geofencing_location.dart';
 import 'package:dummy_api_call_retrofit/screens/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:geofence_service/geofence_service.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../generated/l10n.dart';
@@ -30,36 +29,42 @@ class _AddLocationPageState extends State<AddLocationPage> {
   ValueNotifier<bool> exitSwitch = ValueNotifier(false);
   TextEditingController nameController = TextEditingController();
 
-  final _geofenceService = GeofenceService.instance.setup(
-      interval: 5000,
-      accuracy: 100,
-      loiteringDelayMs: 60000,
-      statusChangeDelayMs: 10000,
-      useActivityRecognition: true,
-      allowMockLocations: false,
-      printDevLog: false,
-      geofenceRadiusSortType: GeofenceRadiusSortType.DESC);
+  // final _geofenceService = GeofenceService.instance.setup(
+  //     interval: 5000,
+  //     accuracy: 100,
+  //     loiteringDelayMs: 60000,
+  //     statusChangeDelayMs: 10000,
+  //     useActivityRecognition: true,
+  //     allowMockLocations: false,
+  //     printDevLog: false,
+  //     geofenceRadiusSortType: GeofenceRadiusSortType.DESC);
 
   //Position? _currentPosition;
-  double _currentLat=23.033863;
-  double _currentLong=72.585022;
+  // double _currentLat = 23.033863;
+  // double _currentLong = 72.585022;
+
+  double _currentLat = 0;
+  double _currentLong = 0;
 
   @override
   void initState() {
     super.initState();
+    getCurrentLocation(context);
     //_requestLocationPermission();
-    _geofenceService.start(_geofenceList).catchError(_onError);// Request location permission on initialization
+    // // _geofenceService
+    //     .start(_geofenceList)
+    //     .catchError(_onError); // Request location permission on initialization
   }
-
-  void _onError(error) {
-    final errorCode = getErrorCodesFromError(error);
-    if (errorCode == null) {
-      print('Undefined error: $error');
-      return;
-    }
-
-    print('ErrorCode: $errorCode');
-  }
+  //
+  // void _onError(error) {
+  //   final errorCode = getErrorCodesFromError(error);
+  //   if (errorCode == null) {
+  //     print('Undefined error: $error');
+  //     return;
+  //   }
+  //
+  //   print('ErrorCode: $errorCode');
+  // }
   // Request location permission
   // void _requestLocationPermission() async {
   //   PermissionStatus status = await Permission.location.status;
@@ -79,47 +84,78 @@ class _AddLocationPageState extends State<AddLocationPage> {
   //   }
   // }
 
-  GeofenceService getObjectGEO() {
-    final _geofenceService = GeofenceService.instance.setup(
-        interval: 5000,
-        accuracy: 100,
-        loiteringDelayMs: 60000,
-        statusChangeDelayMs: 10000,
-        useActivityRecognition: true,
-        allowMockLocations: false,
-        printDevLog: false,
-        geofenceRadiusSortType: GeofenceRadiusSortType.DESC);
-    return _geofenceService;
-  }
+  // GeofenceService getObjectGEO() {
+  //   final _geofenceService = GeofenceService.instance.setup(
+  //       interval: 5000,
+  //       accuracy: 100,
+  //       loiteringDelayMs: 60000,
+  //       statusChangeDelayMs: 10000,
+  //       useActivityRecognition: true,
+  //       allowMockLocations: false,
+  //       printDevLog: false,
+  //       geofenceRadiusSortType: GeofenceRadiusSortType.DESC);
+  //   return _geofenceService;
+  // }
 
   // Create a [Geofence] list.
-  final _geofenceList = <Geofence>[
-    Geofence(
-      id: 'place_1',
-      latitude: 23.033863,
-      longitude: 72.585022,
-      radius: [
-        GeofenceRadius(id: 'radius_100m', length: 100),
-        GeofenceRadius(id: 'radius_25m', length: 25),
-        GeofenceRadius(id: 'radius_250m', length: 250),
-        GeofenceRadius(id: 'radius_200m', length: 200),
-      ],
-    ),
-  ];
+  // final _geofenceList = <Geofence>[
+  //   Geofence(
+  //     id: 'place_1',
+  //     latitude: 23.033863,
+  //     longitude: 72.585022,
+  //     radius: [
+  //       GeofenceRadius(id: 'radius_100m', length: 100),
+  //       GeofenceRadius(id: 'radius_25m', length: 25),
+  //       GeofenceRadius(id: 'radius_250m', length: 250),
+  //       GeofenceRadius(id: 'radius_200m', length: 200),
+  //     ],
+  //   ),
+  // ];
 
-  Set<Circle> circles = Set.from([
-    Circle(
-      circleId: CircleId('geo_fence_1'),
-      center: LatLng(
-        23.033863,
-        72.585022,
-      ),
-      radius: 200,
-      strokeWidth: 2,
-      strokeColor: Colors.green,
-      fillColor: Colors.green.withOpacity(0.15),
-    ),
-  ]);
+  Future<LatLng> getCurrentLocation(BuildContext context) async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      throw Exception("Location services are disabled.");
+    } else {
+      debugPrint("Get current location manager");
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      _currentLat = position.latitude;
+      _currentLong = position.longitude;
+
+      debugPrint("Location lat long  $_currentLat  $_currentLong");
+
+      setState(() {});
+
+      GoogleMapController controller = await _controller.future;
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(_currentLat, _currentLong),
+            zoom: 15.0,
+          ),
+        ),
+      );
+
+      return LatLng(_currentLat, _currentLong);
+    }
+  }
+
+  // Set<Circle> circles = Set.from([
+  //   Circle(
+  //     circleId: CircleId('geo_fence_1'),
+  //     center: LatLng(
+  //       _currentLat!,
+  //       _currentLong!,
+  //     ),
+  //     radius: 200,
+  //     strokeWidth: 2,
+  //     strokeColor: Colors.green,
+  //     fillColor: Colors.green.withOpacity(0.15),
+  //   ),
+  // ]);
 
   // void _getCurrentLocation() async {
   //   try {
@@ -151,16 +187,15 @@ class _AddLocationPageState extends State<AddLocationPage> {
   //   }
   // }
 
-  // Set<Marker> _createMarkers() {
-  //   return [
-  //     Marker(
-  //       markerId: MarkerId('current_location'),
-  //       position:
-  //           LatLng(_currentPosition!.latitude!, _currentPosition!.longitude!),
-  //       infoWindow: InfoWindow(title: 'Your Location'),
-  //     ),
-  //   ].toSet();
-  // }
+  Set<Marker> _createMarkers() {
+    return {
+      Marker(
+        markerId: MarkerId('current_location'),
+        position: LatLng(_currentLat, _currentLong),
+        infoWindow: InfoWindow(title: 'Your Location'),
+      ),
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,18 +213,31 @@ class _AddLocationPageState extends State<AddLocationPage> {
               height: 450.h,
               width: 1.sw,
               child: GoogleMap(
-                //circles: circles,
-                onMapCreated: (controller) {
-                  _controller.complete(controller);
-                },
-                initialCameraPosition: CameraPosition(
-                  target: _center,
-                  zoom: 8.0,
-                ),
-                myLocationButtonEnabled: true,
-                myLocationEnabled: true,
-                //markers: _currentPosition != null ? _createMarkers() : Set(),
-              ),
+                  circles: {
+                    Circle(
+                      circleId: CircleId('geo_fence_1'),
+                      center: LatLng(
+                        _currentLat,
+                        _currentLong,
+                      ),
+                      radius: 200,
+                      strokeWidth: 2,
+                      strokeColor: Colors.green,
+                      fillColor: Colors.green.withOpacity(0.15),
+                    ),
+                  },
+                  onMapCreated: (controller) {
+                    _controller.complete(controller);
+                  },
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(_currentLat, _currentLong),
+                    zoom: 8.0,
+                  ),
+                  myLocationButtonEnabled: true,
+                  myLocationEnabled: true,
+                  markers: _createMarkers()
+                  //markers: _currentPosition != null ? () : Set(),
+                  ),
             ),
             _showRangeView()
           ],
