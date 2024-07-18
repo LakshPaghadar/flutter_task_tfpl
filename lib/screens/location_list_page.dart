@@ -135,7 +135,7 @@ class _LocationListPageState extends State<LocationListPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Monk - 2"),
+                                Text(appDB.locationList[index].name),
                                 SizedBox(
                                   height: 10.h,
                                 ),
@@ -150,15 +150,30 @@ class _LocationListPageState extends State<LocationListPage> {
                                       width: 5.w,
                                     ),
                                     Text(
-                                      "10 km distance |",
+                                      "${appDB.locationList[index].distance} km distance |",
                                       style: textBlack12_400,
                                     ),
                                     SizedBox(
                                       width: 10.w,
                                     ),
-                                    Text(
-                                      "On Entry",
-                                      style: textBlack12_400,
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: AppColor.color898A8B,
+                                      borderRadius: BorderRadius.all(Radius.circular(10).r),),
+                                      child:
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 2).r,
+                                            child: appDB.locationList[index].isEntry ==
+                                                    true
+                                                ? Text(
+                                                    S.of(context).onEntry,
+                                                    style: textBlack12_400,
+                                                  )
+                                                : Text(
+                                                    S.of(context).onExit,
+                                                    style: textBlack12_400,
+                                                  ),
+                                          ),
                                     ),
                                   ],
                                 ),

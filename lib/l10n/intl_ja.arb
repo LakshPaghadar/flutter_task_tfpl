@@ -25,5 +25,6 @@
   "english": "English",
   "arabic": "Arabic",
   "japanese": "Japanese",
-  "noDataFound": "何もデータが見つかりませんでした"
+  "noDataFound": "何もデータが見つかりませんでした",
+  "save": "Save"
 }

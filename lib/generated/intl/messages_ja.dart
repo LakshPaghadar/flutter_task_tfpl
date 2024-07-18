@@ -43,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "noDataFound": MessageLookupByLibrary.simpleMessage("何もデータが見つかりませんでした"),
         "onEntry": MessageLookupByLibrary.simpleMessage("入場時"),
         "onExit": MessageLookupByLibrary.simpleMessage("出口時"),
+        "save": MessageLookupByLibrary.simpleMessage("Save"),
         "search": MessageLookupByLibrary.simpleMessage("検索"),
         "selectARange": MessageLookupByLibrary.simpleMessage("範囲を選択してください"),
         "selectLanguage": MessageLookupByLibrary.simpleMessage("言語を選択する"),

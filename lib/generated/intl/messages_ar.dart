@@ -46,6 +46,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "noDataFound": MessageLookupByLibrary.simpleMessage("لاتوجد بيانات"),
         "onEntry": MessageLookupByLibrary.simpleMessage("عند الدخول"),
         "onExit": MessageLookupByLibrary.simpleMessage("عند الخروج"),
+        "save": MessageLookupByLibrary.simpleMessage("Save"),
         "search": MessageLookupByLibrary.simpleMessage("يبحث"),
         "selectARange": MessageLookupByLibrary.simpleMessage("حدد نطاقًا"),
         "selectLanguage": MessageLookupByLibrary.simpleMessage("اختار اللغة"),

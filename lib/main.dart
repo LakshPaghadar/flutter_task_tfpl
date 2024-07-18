@@ -38,12 +38,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale _locale = Locale('en');
-  // This widget is the root of your application.
-  // void setLocale(Locale value) {
-  //   setState(() {
-  //     _locale = value;
-  //   });
-  // }
+
 
   @override
   Widget build(BuildContext context) {

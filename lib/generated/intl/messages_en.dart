@@ -44,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "noDataFound": MessageLookupByLibrary.simpleMessage("No Data found"),
         "onEntry": MessageLookupByLibrary.simpleMessage("On Entry"),
         "onExit": MessageLookupByLibrary.simpleMessage("On Exit"),
+        "save": MessageLookupByLibrary.simpleMessage("Save"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
         "selectARange": MessageLookupByLibrary.simpleMessage("Select a Range"),
         "selectLanguage":

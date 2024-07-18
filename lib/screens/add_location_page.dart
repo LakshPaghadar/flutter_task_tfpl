@@ -5,7 +5,9 @@ import 'package:dummy_api_call_retrofit/screens/model/geofencing_location.dart';
 import 'package:dummy_api_call_retrofit/screens/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geofence_service/geofence_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../generated/l10n.dart';
@@ -28,44 +30,120 @@ class _AddLocationPageState extends State<AddLocationPage> {
   ValueNotifier<bool> exitSwitch = ValueNotifier(false);
   TextEditingController nameController = TextEditingController();
 
-  //LocationData? _currentLocation; // To store the current location data
-  //Location location = Location(); // Location service instance
+  final _geofenceService = GeofenceService.instance.setup(
+      interval: 5000,
+      accuracy: 100,
+      loiteringDelayMs: 60000,
+      statusChangeDelayMs: 10000,
+      useActivityRecognition: true,
+      allowMockLocations: false,
+      printDevLog: false,
+      geofenceRadiusSortType: GeofenceRadiusSortType.DESC);
+
+  //Position? _currentPosition;
+  double _currentLat=23.033863;
+  double _currentLong=72.585022;
 
   @override
   void initState() {
     super.initState();
-    // _requestLocationPermission(); // Request location permission on initialization
+    //_requestLocationPermission();
+    _geofenceService.start(_geofenceList).catchError(_onError);// Request location permission on initialization
   }
 
+  void _onError(error) {
+    final errorCode = getErrorCodesFromError(error);
+    if (errorCode == null) {
+      print('Undefined error: $error');
+      return;
+    }
+
+    print('ErrorCode: $errorCode');
+  }
   // Request location permission
   // void _requestLocationPermission() async {
-  //   var status = await location.requestPermission();
+  //   PermissionStatus status = await Permission.location.status;
   //   if (status == PermissionStatus.granted) {
-  //     _getCurrentLocation(); // Get current location if permission granted
+  //     _getCurrentLocation();
+  //   } else {
+  //     _requestPermission();
   //   }
   // }
 
-  // Get the current location
+  // Future<void> _requestPermission() async {
+  //   PermissionStatus status = await Permission.location.request();
+  //   if (status == PermissionStatus.granted) {
+  //     _getCurrentLocation();
+  //   } else {
+  //     _requestPermission();
+  //   }
+  // }
+
+  GeofenceService getObjectGEO() {
+    final _geofenceService = GeofenceService.instance.setup(
+        interval: 5000,
+        accuracy: 100,
+        loiteringDelayMs: 60000,
+        statusChangeDelayMs: 10000,
+        useActivityRecognition: true,
+        allowMockLocations: false,
+        printDevLog: false,
+        geofenceRadiusSortType: GeofenceRadiusSortType.DESC);
+    return _geofenceService;
+  }
+
+  // Create a [Geofence] list.
+  final _geofenceList = <Geofence>[
+    Geofence(
+      id: 'place_1',
+      latitude: 23.033863,
+      longitude: 72.585022,
+      radius: [
+        GeofenceRadius(id: 'radius_100m', length: 100),
+        GeofenceRadius(id: 'radius_25m', length: 25),
+        GeofenceRadius(id: 'radius_250m', length: 250),
+        GeofenceRadius(id: 'radius_200m', length: 200),
+      ],
+    ),
+  ];
+
+  Set<Circle> circles = Set.from([
+    Circle(
+      circleId: CircleId('geo_fence_1'),
+      center: LatLng(
+        23.033863,
+        72.585022,
+      ),
+      radius: 200,
+      strokeWidth: 2,
+      strokeColor: Colors.green,
+      fillColor: Colors.green.withOpacity(0.15),
+    ),
+  ]);
+
   // void _getCurrentLocation() async {
   //   try {
-  //     var locationData = await location.getLocation();
-  //     setState(() {
-  //       _currentLocation = locationData;
-  //       debugPrint("LOCATION + ${locationData.latitude} ");
-  //     });
-  //     _moveCameraToCurrentLocation(); // Move camera to current location
+  //     final position = await Geolocator.getCurrentPosition(
+  //         /*desiredAccuracy: LocationAccuracy.high*/);
+  //     _currentPosition = position;
+  //     //_currentlatlng.latitude=position.latitude
+  //     _currentLat = position.latitude;
+  //     _currentLong = position.longitude;
+  //     print("LOCATION ${position.latitude} || ${position.longitude}");
+  //
+  //     _moveCameraToCurrentLocation();
   //   } catch (e) {
   //     print('Error getting location: $e');
   //   }
   // }
 
-  // Move camera to the current location
   // void _moveCameraToCurrentLocation() {
   //   if (_controller.isCompleted) {
   //     _controller.future.then((controller) {
   //       controller.animateCamera(CameraUpdate.newCameraPosition(
   //         CameraPosition(
-  //           target: LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!),
+  //           target: LatLng(
+  //               _currentPosition!.latitude!, _currentPosition!.longitude!),
   //           zoom: 15,
   //         ),
   //       ));
@@ -73,12 +151,12 @@ class _AddLocationPageState extends State<AddLocationPage> {
   //   }
   // }
 
-  // Create markers for the current location
   // Set<Marker> _createMarkers() {
   //   return [
   //     Marker(
   //       markerId: MarkerId('current_location'),
-  //       position: LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!),
+  //       position:
+  //           LatLng(_currentPosition!.latitude!, _currentPosition!.longitude!),
   //       infoWindow: InfoWindow(title: 'Your Location'),
   //     ),
   //   ].toSet();
@@ -100,6 +178,7 @@ class _AddLocationPageState extends State<AddLocationPage> {
               height: 450.h,
               width: 1.sw,
               child: GoogleMap(
+                //circles: circles,
                 onMapCreated: (controller) {
                   _controller.complete(controller);
                 },
@@ -109,7 +188,7 @@ class _AddLocationPageState extends State<AddLocationPage> {
                 ),
                 myLocationButtonEnabled: true,
                 myLocationEnabled: true,
-                //markers: _currentLocation != null ? _createMarkers() : Set(),
+                //markers: _currentPosition != null ? _createMarkers() : Set(),
               ),
             ),
             _showRangeView()
@@ -298,39 +377,19 @@ class _AddLocationPageState extends State<AddLocationPage> {
                       height: 20.h,
                     ),
                     AppButton(
-                      "Save",
+                      S.of(context).save,
                       () {
                         var nameS = nameController.text.toString();
                         List<GeofencingLocation> list = appDB.locationList;
-                        // debugPrint(
-                        //     "LOCATION_DATA TYPE 1 ${appDB.locationList.runtimeType}");
                         list.add(GeofencingLocation(
                             name: nameS,
                             isEntry: entrySwitch.value,
                             isExit: exitSwitch.value,
                             distance: _currentSliderValue.value.toInt(),
-                            latitude: 23.02866016268289,
-                            longitude: 72.50693756823183));
+                            latitude: _currentLat!,
+                            longitude: _currentLong!));
                         appDB.locationList = list;
-                        // try {
-                        //   appDB.locationList.add(
-                        //     GeofencingLocation(
-                        //         name: nameS,
-                        //         isEntry: entrySwitch.value,
-                        //         isExit: exitSwitch.value,
-                        //         distance: _currentSliderValue.value.toInt(),
-                        //         latitude: 23.02866016268289,
-                        //         longitude: 72.50693756823183),
-                        //   );
-                        // } catch (e, st) {
-                        //   debugPrint("error" + e.toString());
-                        //   debugPrintStack(stackTrace: st);
-                        // }
 
-                        debugPrint("LOCATION_DATA ${appDB.locationList}");
-                        debugPrint(
-                            "LOCATION_DATA TYPE ${appDB.locationList.runtimeType}");
-                        debugPrint("LOCATION_DATA LIST ${list}");
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
