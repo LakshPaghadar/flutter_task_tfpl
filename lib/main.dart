@@ -2,7 +2,9 @@ import 'package:dummy_api_call_retrofit/screens/app_lang/app_db.dart';
 import 'package:dummy_api_call_retrofit/screens/app_lang/app_language.dart';
 import 'package:dummy_api_call_retrofit/screens/model/geofencing_location.dart';
 import 'package:dummy_api_call_retrofit/screens/photos_list_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
@@ -25,7 +27,19 @@ void main() async {
   AppLanguage appLanguage = locator<AppLanguage>();
   await appLanguage.fetchLocale();
 
-  runApp(const MyApp());
+  // Fixing App Orientation.
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then(
+    (value) async {
+      /// Disable debugPrint logs in production
+      if (kReleaseMode) {
+        debugPrint = (String? message, {int? wrapWidth}) {};
+      }
+      runApp(const MyApp());
+    },
+  );
 }
 
 class MyApp extends StatefulWidget {
