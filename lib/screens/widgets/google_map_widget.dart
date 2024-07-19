@@ -33,29 +33,32 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      circles: {
-        Circle(
-          circleId: CircleId('geo_fence_1'),
-          center: LatLng(
-            widget.selectedLocation.latitude,
-            widget.selectedLocation.longitude,
+    return IgnorePointer(
+      ignoring: true,
+      child: GoogleMap(
+        circles: {
+          Circle(
+            circleId: CircleId('geo_fence_1'),
+            center: LatLng(
+              widget.selectedLocation.latitude,
+              widget.selectedLocation.longitude,
+            ),
+            radius: widget.selectedLocation.distance * 500,
+            strokeWidth: 2,
+            strokeColor: Colors.green,
+            fillColor: Colors.green.withOpacity(0.15),
           ),
-          radius: widget.selectedLocation.distance * 100,
-          strokeWidth: 2,
-          strokeColor: Colors.green,
-          fillColor: Colors.green.withOpacity(0.15),
+        },
+        onMapCreated: (controller) {
+          _controller.complete(controller);
+          mapController = controller;
+        },
+        markers: _createMarkers(),
+        initialCameraPosition: CameraPosition(
+          target: LatLng(widget.selectedLocation.latitude,
+              widget.selectedLocation.longitude),
+          zoom: 12.0,
         ),
-      },
-      onMapCreated: (controller) {
-        _controller.complete(controller);
-        mapController = controller;
-      },
-      markers: _createMarkers(),
-      initialCameraPosition: CameraPosition(
-        target: LatLng(widget.selectedLocation.latitude,
-            widget.selectedLocation.longitude),
-        zoom: 14.0,
       ),
     );
   }
@@ -67,7 +70,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
         CameraPosition(
           target: LatLng(widget.selectedLocation.latitude,
               widget.selectedLocation.longitude),
-          zoom: 14.0,
+          zoom: 12.0,
         ),
       ),
     );

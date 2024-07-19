@@ -206,7 +206,8 @@ class _AddLocationPageState extends State<AddLocationPage> {
                           _currentLat,
                           _currentLong,
                         ),
-                        radius: value * 100,
+                        //23.075375435548818, 72.52567223150744
+                        radius: value * 500,
                         strokeWidth: 2,
                         strokeColor: Colors.green,
                         fillColor: Colors.green.withOpacity(0.15),
@@ -376,27 +377,27 @@ class _AddLocationPageState extends State<AddLocationPage> {
   double getZoomValue(int radius) {
     switch (radius) {
       case 1:
-        return 17.0;
+        return 14.0;
       case 2:
-        return 17.0;
+        return 13.0;
       case 3:
-        return 16.0;
+        return 13.0;
       case 4:
-        return 16.0;
+        return 12.0;
       case 5:
-        return 15.0;
+        return 12.0;
       case 6:
-        return 15.0;
+        return 12.0;
       case 7:
-        return 15.0;
+        return 12.0;
       case 8:
-        return 15.0;
+        return 11.0;
       case 9:
-        return 14.0;
+        return 11.0;
       case 10:
-        return 14.0;
+        return 11.0;
       default:
-        return 15.0;
+        return 11.0;
     }
   }
 
